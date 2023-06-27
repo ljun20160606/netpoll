@@ -19,6 +19,7 @@ package netpoll
 
 import (
 	"errors"
+	"net"
 	"syscall"
 	"testing"
 )
@@ -33,4 +34,8 @@ func TestErrno(t *testing.T) {
 	MustTrue(t, errors.Is(err2, syscall.EPIPE))
 	Equal(t, err2.Error(), "broken pipe when flush")
 	t.Logf("error2=%s", err2)
+
+	err1 = Exception(ErrReadTimeout, "")
+	_, ok := err1.(net.Error)
+	MustTrue(t, ok)
 }

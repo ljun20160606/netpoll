@@ -70,6 +70,18 @@ func (e *exception) Error() string {
 	return s
 }
 
+func (e *exception) Timeout() bool {
+	return e.timeout() || e.no.Timeout()
+}
+
+func (e *exception) Temporary() bool {
+	return e.timeout() || e.no.Temporary()
+}
+
+func (e *exception) timeout() bool {
+	return e.no == ErrReadTimeout || e.no == ErrDialTimeout || e.no == ErrWriteTimeout
+}
+
 func (e *exception) Is(target error) bool {
 	if e == target {
 		return true
